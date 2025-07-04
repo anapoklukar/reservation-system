@@ -2,6 +2,10 @@
 
 A full-stack reservation system built with a React frontend and Spring Boot backend. This application allows users to view, create, edit, and delete reservations across multiple resources in a weekly calendar view.
 
+## Preview
+
+![App Screenshot](./screenshot.png)
+
 ## Features
 
 * 📅 Weekly calendar view
