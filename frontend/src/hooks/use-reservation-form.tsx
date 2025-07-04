@@ -1,6 +1,6 @@
 import { useState } from "react";
 import dayjs from "dayjs";
-import { Resource, ReservationRequest } from "../types";
+import { ReservationRequest } from "../types";
 
 interface FormErrors {
   title?: string;
