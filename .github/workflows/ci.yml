@@ -99,9 +99,15 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm install
-      - name: Install Playwright Browsers
-        run: npx playwright install
-      - name: Run Playwright Tests
+      - name: Build frontend
+        run: npm run build
+      - name: Install serve
+        run: npm install -g serve
+      - name: Start server
+        run: serve -s build -l 3000 &
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:3000
+      - name: Run tests
         run: npm run test
 
   build-frontend:
