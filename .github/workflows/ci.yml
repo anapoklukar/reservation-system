@@ -140,7 +140,20 @@ jobs:
       - name: Start backend server
         run: |
           cd ../backend
-          java -jar build/libs/*.jar > ../frontend/backend.log 2>&1 &
+          # List all JAR files for debugging
+          echo "Available JAR files:"
+          ls -la build/libs/
+          
+          # Use the executable JAR (without -plain suffix)
+          if [ -f "build/libs/reservation-system-0.0.1-SNAPSHOT.jar" ]; then
+            JAR_FILE="build/libs/reservation-system-0.0.1-SNAPSHOT.jar"
+          else
+            # Fallback: find any JAR that doesn't contain 'plain'
+            JAR_FILE=$(find build/libs/ -name "*.jar" -not -name "*plain*" | head -1)
+          fi
+          
+          echo "Starting backend with JAR: $JAR_FILE"
+          java -jar "$JAR_FILE" > ../frontend/backend.log 2>&1 &
           echo $! > ../frontend/backend.pid
           echo "Backend started with PID: $(cat ../frontend/backend.pid)"
         env:
