@@ -13,7 +13,7 @@ export const useResources = () => {
       const data = await ApiResources.fetchResources();
       setResources(data);
       setError(null);
-    } catch (err) {
+    } catch {
       setError("Failed to load resources");
     } finally {
       setLoading(false);

@@ -18,7 +18,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-export const Input: React.FC<InputProps> = ({ label, error, style, ...props }) => {
+export const Input = ({ label, error, style, ...props }: InputProps) => {
   return (
     <div style={{ marginBottom: "1rem" }}>
       {label && (

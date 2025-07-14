@@ -9,7 +9,7 @@ interface ModalProps {
   width?: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, width = "340px" }) => {
+export const Modal = ({ isOpen, onClose, title, children, width = "340px" }: ModalProps) => {
   if (!isOpen) return null;
 
   return (

@@ -9,7 +9,7 @@ interface AddResourceModalProps {
   onSuccess: () => void;
 }
 
-export const AddResourceModal: React.FC<AddResourceModalProps> = ({ isOpen, onClose, onSuccess }) => {
+export const AddResourceModal = ({ isOpen, onClose, onSuccess }: AddResourceModalProps) => {
   const [newResourceName, setNewResourceName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -24,7 +24,7 @@ export const AddResourceModal: React.FC<AddResourceModalProps> = ({ isOpen, onCl
     if (trimmedName.length > 255) {
       setError("Resource name must be under 255 characters.");
       return;
-    }    
+    }
 
     setIsLoading(true);
     setError("");
@@ -33,7 +33,7 @@ export const AddResourceModal: React.FC<AddResourceModalProps> = ({ isOpen, onCl
       setNewResourceName("");
       onClose();
       onSuccess();
-    } catch (error) {
+    } catch {
       setError("Failed to create resource.");
     } finally {
       setIsLoading(false);
@@ -66,11 +66,7 @@ export const AddResourceModal: React.FC<AddResourceModalProps> = ({ isOpen, onCl
         <button onClick={handleClose} style={{ ...secondaryButtonStyle, marginRight: "8px" }} disabled={isLoading}>
           Cancel
         </button>
-        <button
-          onClick={handleAdd}
-          style={primaryButtonStyle}
-          disabled={isLoading}
-        >
+        <button onClick={handleAdd} style={primaryButtonStyle} disabled={isLoading}>
           {isLoading ? "Saving..." : "Save"}
         </button>
       </div>

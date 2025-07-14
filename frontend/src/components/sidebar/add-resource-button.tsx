@@ -4,7 +4,7 @@ interface AddButtonProps {
   onClick: () => void;
 }
 
-export const AddCircleButton: React.FC<AddButtonProps> = ({ onClick }) => {
+export const AddCircleButton = ({ onClick }: AddButtonProps) => {
   const [isHovered, setIsHovered] = React.useState(false);
 
   return (

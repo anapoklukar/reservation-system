@@ -4,7 +4,7 @@ interface ReserveButtonProps {
   onClick: () => void;
 }
 
-export const ReserveButton: React.FC<ReserveButtonProps> = ({ onClick }) => {
+export const ReserveButton = ({ onClick }: ReserveButtonProps) => {
   const [isHovered, setIsHovered] = React.useState(false);
 
   return (

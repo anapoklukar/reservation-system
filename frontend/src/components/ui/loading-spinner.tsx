@@ -1,6 +1,6 @@
 import React from "react";
 
-export const LoadingSpinner: React.FC = () => (
+export const LoadingSpinner = () => (
   <div
     style={{
       display: "flex",

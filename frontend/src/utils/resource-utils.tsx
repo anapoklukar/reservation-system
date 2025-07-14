@@ -1,7 +1,7 @@
 import { Resource } from "../types";
 import { RESOURCE_COLORS } from "../constants/colors";
 
-export const getColoredResources = (resources: Resource[]): Resource[] => {
+export const getColoredResources = (resources: Resource[]) => {
   return resources.map((r, i) => ({
     ...r,
     color: r.color || RESOURCE_COLORS[i % RESOURCE_COLORS.length],

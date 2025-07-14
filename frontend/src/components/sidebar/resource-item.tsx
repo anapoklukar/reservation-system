@@ -8,7 +8,7 @@ interface ResourceItemProps {
   onDelete: () => void;
 }
 
-export const ResourceItem: React.FC<ResourceItemProps> = ({ resource, onToggle, onEdit, onDelete }) => {
+export const ResourceItem = ({ resource, onToggle, onEdit, onDelete }: ResourceItemProps) => {
   const handleMouseEnter = (e: React.MouseEvent<HTMLLIElement>) => {
     e.currentTarget.style.backgroundColor = "#f1f3f4";
     const icons = e.currentTarget.querySelector(".action-icons") as HTMLDivElement;

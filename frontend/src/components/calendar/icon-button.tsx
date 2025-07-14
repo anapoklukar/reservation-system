@@ -10,7 +10,7 @@ interface IconButtonProps {
   disabled?: boolean;
 }
 
-export const IconButton: React.FC<IconButtonProps> = ({
+export const IconButton = ({
   onClick,
   icon,
   "aria-label": ariaLabel,
@@ -18,7 +18,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   variant = "default",
   size = "md",
   disabled = false,
-}) => {
+}: IconButtonProps) => {
   const baseStyles: React.CSSProperties = {
     background: "transparent",
     border: "none",

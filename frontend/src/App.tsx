@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import CalendarPage from "./pages/calendar-page";
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <Router>
       <Routes>

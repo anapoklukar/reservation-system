@@ -11,7 +11,7 @@ interface TruncatedTextProps {
   className?: string;
 }
 
-export const TruncatedText: React.FC<TruncatedTextProps> = ({
+export const TruncatedText = ({
   text,
   maxWidth = "300px",
   fontSize = "1em",
@@ -20,7 +20,7 @@ export const TruncatedText: React.FC<TruncatedTextProps> = ({
   marginBottom = "0",
   paddingRight = "0",
   className = "",
-}) => {
+}: TruncatedTextProps) => {
   return (
     <div
       title={text}

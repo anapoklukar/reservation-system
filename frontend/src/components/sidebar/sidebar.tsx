@@ -15,7 +15,7 @@ interface SidebarProps {
   refreshData: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ resources, onToggleResource, reservations, refreshData }) => {
+const Sidebar = ({ resources, onToggleResource, reservations, refreshData }: SidebarProps) => {
   const [showReservationModal, setShowReservationModal] = useState(false);
   const [showAddResourceModal, setShowAddResourceModal] = useState(false);
   const [resourceToEdit, setResourceToEdit] = useState<Resource | null>(null);

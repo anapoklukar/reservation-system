@@ -11,13 +11,13 @@ interface ResourceListProps {
   onAddResource: () => void;
 }
 
-export const ResourceList: React.FC<ResourceListProps> = ({
+export const ResourceList = ({
   resources,
   onToggleResource,
   onEditResource,
   onDeleteResource,
   onAddResource,
-}) => {
+}: ResourceListProps) => {
   return (
     <div>
       <div

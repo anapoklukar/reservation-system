@@ -12,7 +12,7 @@ interface CalendarGridProps {
   onEventClick: (event: Reservation, e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export const CalendarGrid: React.FC<CalendarGridProps> = ({ weekStart, events, resources, onEventClick }) => {
+export const CalendarGrid = ({ weekStart, events, resources, onEventClick }: CalendarGridProps) => {
   const days = Array.from({ length: DAYS_IN_WEEK }, (_, i) => i);
 
   return (
@@ -31,13 +31,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({ weekStart, events, r
         );
 
         return (
-          <CalendarDay
-            key={`day-${dayOffset}`}
-            dayOffset={dayOffset}
-            events={dayEvents}
-            resources={resources}
-            onEventClick={onEventClick}
-          />
+          <CalendarDay key={`day-${dayOffset}`} events={dayEvents} resources={resources} onEventClick={onEventClick} />
         );
       })}
     </div>

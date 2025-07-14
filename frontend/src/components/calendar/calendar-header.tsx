@@ -6,7 +6,7 @@ interface CalendarHeaderProps {
   weekStart: dayjs.Dayjs;
 }
 
-export const CalendarHeader: React.FC<CalendarHeaderProps> = ({ weekStart }) => {
+export const CalendarHeader = ({ weekStart }: CalendarHeaderProps) => {
   const days = Array.from({ length: DAYS_IN_WEEK }, (_, i) => i);
   const today = dayjs();
 

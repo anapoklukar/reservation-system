@@ -9,13 +9,13 @@ interface PopupActionsProps {
   deleteDisabled?: boolean;
 }
 
-export const PopupActions: React.FC<PopupActionsProps> = ({
+export const PopupActions = ({
   onEdit,
   onDelete,
   onClose,
   editDisabled = false,
   deleteDisabled = false,
-}) => {
+}: PopupActionsProps) => {
   return (
     <div
       style={{

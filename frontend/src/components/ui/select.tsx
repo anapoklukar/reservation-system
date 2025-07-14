@@ -7,7 +7,7 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   placeholder?: string;
 }
 
-export const Select: React.FC<SelectProps> = ({ label, error, options, placeholder, style, ...props }) => {
+export const Select = ({ label, error, options, placeholder, style, ...props }: SelectProps) => {
   return (
     <div style={{ marginBottom: "1rem" }}>
       {label && (

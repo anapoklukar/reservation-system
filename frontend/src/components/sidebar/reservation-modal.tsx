@@ -13,13 +13,7 @@ interface ReservationModalProps {
   reservations: Reservation[];
 }
 
-export const ReservationModal: React.FC<ReservationModalProps> = ({
-  isOpen,
-  onClose,
-  onSuccess,
-  resources,
-  reservations,
-}) => {
+export const ReservationModal = ({ isOpen, onClose, onSuccess, resources, reservations }: ReservationModalProps) => {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [startTime, setStartTime] = useState("08:00");
@@ -49,7 +43,7 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({
       setError("Title must be under 255 characters.");
       return;
     }
-    
+
     if (!selectedResourceId) {
       setError("Please select a resource.");
       return false;
@@ -83,8 +77,13 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({
       const start = dayjs(`${date}T${startTime}`);
       const end = dayjs(`${date}T${endTime}`);
 
+      if (!selectedResourceId) {
+        setError("Please select a resource.");
+        return;
+      }
+
       await createReservation({
-        resourceId: selectedResourceId!,
+        resourceId: selectedResourceId,
         title: title.trim(),
         startAt: start.format("YYYY-MM-DDTHH:mm:ss"),
         endAt: end.format("YYYY-MM-DDTHH:mm:ss"),
@@ -93,7 +92,7 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({
       resetForm();
       onClose();
       onSuccess();
-    } catch (err) {
+    } catch {
       setError("Failed to save reservation. Please try again.");
     } finally {
       setIsLoading(false);

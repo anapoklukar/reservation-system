@@ -25,7 +25,7 @@ reservation-system/
 
 ## Prerequisites
 
-* **Node.js** (18)
+* **Node.js** (22)
 * **npm** (10)
 * **Java** (21)
 * **Gradle** (8.14)
@@ -81,4 +81,14 @@ Run the integration test:
 ```bash
 cd backend
 DB_USERNAME=yourusername DB_PASSWORD=yourpassword SPRING_PROFILES_ACTIVE=dev ./gradlew test
+```
+
+### Frontend Test
+
+Make sure the app is running locally (on `localhost:3000`), then run:
+
+```bash
+cd frontend
+npm install
+npm run test
 ```

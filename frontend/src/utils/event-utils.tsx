@@ -5,7 +5,7 @@ import { PositionedEvent } from "../types";
 
 dayjs.extend(isSameOrAfter);
 
-export const assignEventColumns = (events: Reservation[]): PositionedEvent[] => {
+export const assignEventColumns = (events: Reservation[]) => {
   const positioned: PositionedEvent[] = [];
   const sorted = [...events].sort((a, b) => dayjs(a.startAt).diff(dayjs(b.startAt)));
   const columns: { end: dayjs.Dayjs }[] = [];

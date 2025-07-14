@@ -12,15 +12,7 @@ interface CalendarEventProps {
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export const CalendarEvent: React.FC<CalendarEventProps> = ({
-  event,
-  top,
-  height,
-  left,
-  backgroundColor,
-  zIndex,
-  onClick,
-}) => (
+export const CalendarEvent = ({ event, top, height, left, backgroundColor, zIndex, onClick }: CalendarEventProps) => (
   <div
     style={{
       position: "absolute",

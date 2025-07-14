@@ -15,7 +15,7 @@ interface DateTimeInputsProps {
   };
 }
 
-export const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
+export const DateTimeInputs = ({
   date,
   startTime,
   endTime,
@@ -23,7 +23,7 @@ export const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
   onStartTimeChange,
   onEndTimeChange,
   errors = {},
-}) => {
+}: DateTimeInputsProps) => {
   return (
     <div style={{ marginBottom: "1.2rem" }}>
       <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>

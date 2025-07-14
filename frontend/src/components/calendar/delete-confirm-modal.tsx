@@ -7,7 +7,7 @@ interface DeleteConfirmModalProps {
   onCancel: () => void;
 }
 
-export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ reservation, onConfirm, onCancel }) => (
+export const DeleteConfirmModal = ({ reservation, onConfirm, onCancel }: DeleteConfirmModalProps) => (
   <div
     style={{
       position: "fixed",

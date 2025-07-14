@@ -30,8 +30,7 @@ export const useCalendarState = (onDataChange?: () => void) => {
     };
   }, [popupData]);
 
-  // @ts-ignore
-  useClickOutside(popupRef, () => setPopupData(null));
+  useClickOutside(popupRef as React.RefObject<HTMLElement>, () => setPopupData(null));
 
   const handleEventClick = (event: Reservation, e: React.MouseEvent<HTMLDivElement>) => {
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();

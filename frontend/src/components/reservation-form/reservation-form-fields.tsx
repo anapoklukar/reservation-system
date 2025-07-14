@@ -27,13 +27,13 @@ interface ReservationFormFieldsProps {
   isLoading?: boolean;
 }
 
-export const ReservationFormFields: React.FC<ReservationFormFieldsProps> = ({
+export const ReservationFormFields = ({
   formData,
   errors,
   resources,
   updateField,
   isLoading = false,
-}) => {
+}: ReservationFormFieldsProps) => {
   return (
     <>
       <input

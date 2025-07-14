@@ -11,12 +11,7 @@ interface EditResourceModalProps {
   onSuccess: () => void;
 }
 
-export const EditResourceModal: React.FC<EditResourceModalProps> = ({
-  isOpen,
-  resource,
-  onClose,
-  onSuccess,
-}) => {
+export const EditResourceModal = ({ isOpen, resource, onClose, onSuccess }: EditResourceModalProps) => {
   const [resourceName, setResourceName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -38,7 +33,7 @@ export const EditResourceModal: React.FC<EditResourceModalProps> = ({
     if (resourceName.length > 255) {
       setError("Resource name must be under 255 characters.");
       return;
-    }    
+    }
 
     setIsLoading(true);
     setError("");
@@ -48,7 +43,7 @@ export const EditResourceModal: React.FC<EditResourceModalProps> = ({
       });
       onClose();
       onSuccess();
-    } catch (error) {
+    } catch {
       setError("Failed to update resource. Please try again.");
     } finally {
       setIsLoading(false);
@@ -81,11 +76,7 @@ export const EditResourceModal: React.FC<EditResourceModalProps> = ({
         <button onClick={handleClose} style={{ ...secondaryButtonStyle, marginRight: "8px" }} disabled={isLoading}>
           Cancel
         </button>
-        <button
-          onClick={handleUpdate}
-          style={primaryButtonStyle}
-          disabled={isLoading}
-        >
+        <button onClick={handleUpdate} style={primaryButtonStyle} disabled={isLoading}>
           {isLoading ? "Saving..." : "Save"}
         </button>
       </div>

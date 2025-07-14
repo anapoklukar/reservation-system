@@ -20,7 +20,7 @@ export const useCalendarData = (weekStart: dayjs.Dayjs) => {
         visible: true,
       }));
       setResources(coloredResources);
-    } catch (err) {
+    } catch {
       setError("Failed to load resources");
     } finally {
       setLoading(false);
@@ -37,7 +37,7 @@ export const useCalendarData = (weekStart: dayjs.Dayjs) => {
 
       const data = await ApiReservations.fetchReservationsInRange(startOfWeek, endOfWeek);
       setEvents(data);
-    } catch (err) {
+    } catch {
       setError("Failed to load reservations");
     } finally {
       setLoading(false);

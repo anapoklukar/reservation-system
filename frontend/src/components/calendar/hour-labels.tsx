@@ -1,7 +1,7 @@
 import React from "react";
 import { HOURS_IN_DAY, HOUR_HEIGHT } from "../../constants/calendar";
 
-export const HourLabels: React.FC = () => {
+export const HourLabels = () => {
   const hours = Array.from({ length: HOURS_IN_DAY }, (_, i) => i);
 
   return (

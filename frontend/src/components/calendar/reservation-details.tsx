@@ -10,11 +10,7 @@ interface ReservationDetailsProps {
   hasActions?: boolean;
 }
 
-export const ReservationDetails: React.FC<ReservationDetailsProps> = ({
-  reservation,
-  resources,
-  hasActions = false,
-}) => {
+export const ReservationDetails = ({ reservation, resources, hasActions = false }: ReservationDetailsProps) => {
   const resourceName = getResourceName(resources, reservation.resourceId);
 
   return (

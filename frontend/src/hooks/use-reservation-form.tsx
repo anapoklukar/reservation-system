@@ -32,7 +32,7 @@ export const useReservationForm = ({ initialValues = {}, onSubmit, onSuccess }: 
     resourceId: initialValues.resourceId || null,
     date: initialValues.startAt ? dayjs(initialValues.startAt).format("YYYY-MM-DD") : dayjs().format("YYYY-MM-DD"),
     startTime: initialValues.startAt ? dayjs(initialValues.startAt).format("HH:mm") : "08:00",
-    endTime: initialValues.endAt ? dayjs(initialValues.endAt).format("HH:mm") : "09:00"
+    endTime: initialValues.endAt ? dayjs(initialValues.endAt).format("HH:mm") : "09:00",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -82,16 +82,21 @@ export const useReservationForm = ({ initialValues = {}, onSubmit, onSuccess }: 
       const startAt = dayjs(`${formData.date}T${formData.startTime}`);
       const endAt = dayjs(`${formData.date}T${formData.endTime}`);
 
+      if (!formData.resourceId) {
+        setErrors({ resourceId: "Please select a resource" });
+        return;
+      }
+
       await onSubmit({
         title: formData.title.trim(),
-        resourceId: formData.resourceId!,
+        resourceId: formData.resourceId,
         startAt: startAt.format("YYYY-MM-DDTHH:mm:ss"),
         endAt: endAt.format("YYYY-MM-DDTHH:mm:ss"),
       });
 
       resetForm();
       onSuccess?.();
-    } catch (error) {
+    } catch {
       setErrors({ general: "Failed to save reservation. Please try again." });
     } finally {
       setIsSubmitting(false);

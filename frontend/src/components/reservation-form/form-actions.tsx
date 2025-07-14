@@ -10,14 +10,14 @@ interface FormActionsProps {
   disabled?: boolean;
 }
 
-export const FormActions: React.FC<FormActionsProps> = ({
+export const FormActions = ({
   onCancel,
   onSubmit,
   isSubmitting,
   cancelText = "Cancel",
   submitText = "Save",
   disabled = false,
-}) => {
+}: FormActionsProps) => {
   return (
     <div style={{ textAlign: "right" }}>
       <button

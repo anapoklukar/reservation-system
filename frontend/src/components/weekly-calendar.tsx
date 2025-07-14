@@ -21,7 +21,7 @@ interface WeeklyCalendarProps {
   onDataChange?: () => void;
 }
 
-const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ weekStart, events, resources, onDataChange }) => {
+const WeeklyCalendar = ({ weekStart, events, resources, onDataChange }: WeeklyCalendarProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const [popupData, setPopupData] = useState<PopupData | null>(null);
@@ -46,8 +46,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ weekStart, events, reso
     };
   }, [popupData]);
 
-  // @ts-ignore
-  useClickOutside(popupRef, () => setPopupData(null));
+  useClickOutside(popupRef as React.RefObject<HTMLElement>, () => setPopupData(null));
 
   const handleEventClick = (event: Reservation, e: React.MouseEvent<HTMLDivElement>) => {
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();

@@ -7,13 +7,12 @@ import { CalendarEvent } from "./calendar-event";
 import { HourGridLines } from "./hour-grid-lines";
 
 interface CalendarDayProps {
-  dayOffset: number;
   events: Reservation[];
   resources: Resource[];
   onEventClick: (event: Reservation, e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export const CalendarDay: React.FC<CalendarDayProps> = ({ dayOffset, events, resources, onEventClick }) => {
+export const CalendarDay = ({ events, resources, onEventClick }: CalendarDayProps) => {
   const positionedEvents = assignEventColumns(events);
 
   return (

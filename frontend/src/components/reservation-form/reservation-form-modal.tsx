@@ -15,14 +15,14 @@ interface ReservationFormModalProps {
   initialValues?: Partial<ReservationRequest>;
 }
 
-export const ReservationFormModal: React.FC<ReservationFormModalProps> = ({
+export const ReservationFormModal = ({
   isOpen,
   onClose,
   onSubmit,
   resources,
   title = "New Reservation",
   initialValues = {},
-}) => {
+}: ReservationFormModalProps) => {
   const { formData, errors, isSubmitting, updateField, handleSubmit, resetForm } = useReservationForm({
     initialValues,
     onSubmit,
