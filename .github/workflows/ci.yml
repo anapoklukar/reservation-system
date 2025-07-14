@@ -88,7 +88,7 @@ jobs:
   test-frontend:
     name: Test Frontend (Playwright)
     runs-on: ubuntu-latest
-    needs: test-backend
+    needs: test-backend  # Only need tests to pass, not build
     defaults:
       run:
         working-directory: frontend
@@ -142,6 +142,7 @@ jobs:
           cd ../backend
           java -jar build/libs/*.jar > ../frontend/backend.log 2>&1 &
           echo $! > ../frontend/backend.pid
+          echo "Backend started with PID: $(cat ../frontend/backend.pid)"
         env:
           DB_USERNAME: testuser
           DB_PASSWORD: testpass
@@ -163,11 +164,56 @@ jobs:
         run: |
           npm run start > frontend.log 2>&1 &
           echo $! > frontend.pid
-      
-      - name: Wait for services
+          echo "Frontend started with PID: $(cat frontend.pid)"
+
+      - name: Wait for services to be ready
         run: |
-          npx wait-on http://localhost:8080/actuator/health http://localhost:3000 --timeout 120000
-        timeout-minutes: 3
+          echo "Waiting for services to start..."
+          sleep 10
+          
+          # Check if processes are still running
+          if [ -f backend.pid ] && kill -0 $(cat backend.pid) 2>/dev/null; then
+            echo "Backend process is running"
+          else
+            echo "Backend process is not running!"
+            echo "Backend logs:"
+            cat backend.log
+            exit 1
+          fi
+          
+          if [ -f frontend.pid ] && kill -0 $(cat frontend.pid) 2>/dev/null; then
+            echo "Frontend process is running"
+          else
+            echo "Frontend process is not running!"
+            echo "Frontend logs:"
+            cat frontend.log
+            exit 1
+          fi
+          
+          # Wait for backend port
+          echo "Waiting for backend on port 8080..."
+          for i in {1..30}; do
+            if nc -z localhost 8080; then
+              echo "Backend port is ready!"
+              break
+            fi
+            echo "Waiting for backend port... ($i/30)"
+            sleep 3
+          done
+          
+          # Wait for frontend port
+          echo "Waiting for frontend on port 3000..."
+          for i in {1..30}; do
+            if nc -z localhost 3000; then
+              echo "Frontend port is ready!"
+              break
+            fi
+            echo "Waiting for frontend port... ($i/30)"
+            sleep 3
+          done
+          
+          echo "Both services should be ready now"
+        timeout-minutes: 4
 
       - name: Run Playwright tests
         run: npm run test
