@@ -49,8 +49,24 @@ jobs:
       run:
         working-directory: backend
     env:
+      DB_USERNAME: testuser
+      DB_PASSWORD: testpass
       SPRING_PROFILES_ACTIVE: dev
-
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: reservation-system
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK
@@ -58,6 +74,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Wait for Postgres
+        run: |
+          for i in {1..15}; do
+            nc -z localhost 5432 && echo "Postgres is ready!" && break
+            echo "Waiting for Postgres..."
+            sleep 3
+          done
       - name: Build Project
         run: ./gradlew build --no-daemon
 
