@@ -39,7 +39,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-      - name: Run Tests
+      - name: Run Backend Tests
         run: ./gradlew test --no-daemon
 
   build-backend:
@@ -85,31 +85,64 @@ jobs:
         run: ./gradlew build --no-daemon
 
   test-frontend:
-    name: Test Frontend
+    name: Test Frontend (Playwright)
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: frontend
 
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: reservation-system
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
+
+      # Backend setup
+      - name: Set up Java for backend
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build backend
+        run: ./gradlew build --no-daemon
+        working-directory: backend
+
+      - name: Start backend server
+        run: java -jar backend/build/libs/*.jar &
+        working-directory: backend
+
+      # Node setup
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-      - name: Install dependencies
+
+      - name: Install frontend dependencies
         run: npm install
 
-      - name: Install Playwright Browsers and System Dependencies
+      - name: Install Playwright browsers and dependencies
         run: npx playwright install --with-deps
 
-      - name: Start server
+      - name: Start frontend dev server
         run: npm run start &
+      
+      - name: Wait for frontend and backend
+        run: npx wait-on http://localhost:3000 http://localhost:8080
 
-      - name: Wait for server
-        run: npx wait-on http://localhost:3000
-
-      - name: Run tests
+      - name: Run Playwright tests
         run: npm run test
 
   build-frontend:
