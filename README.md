@@ -33,14 +33,7 @@ reservation-system/
 
 ## Installation & Setup
 
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/anapoklukar/reservation-system.git
-cd reservation-system
-```
-
-### 2. Database Setup
+### 1. Database Setup
 
 You can run PostgreSQL using Docker:
 
@@ -55,7 +48,7 @@ docker run --name reservation-system \
 
 You can customize the credentials.
 
-### 3. Backend Setup
+### 2. Backend Setup
 
 #### Run the Backend
 
@@ -66,7 +59,7 @@ DB_USERNAME=yourusername DB_PASSWORD=yourpassword ./gradlew clean bootRun
 
 The backend runs on `http://localhost:8080`.
 
-### 4. Frontend Setup
+### 3. Frontend Setup
 
 ```bash
 cd frontend
@@ -85,27 +78,3 @@ Run the integration test:
 cd backend
 DB_USERNAME=yourusername DB_PASSWORD=yourpassword ./gradlew test
 ```
-
-## API Endpoints
-
-### **Reservations**
-
-| Method | Endpoint                    | Description                              |
-| ------ | --------------------------- | ---------------------------------------- |
-| GET    | `/api/reservations`         | Get all reservations                     |
-| GET    | `/api/reservations/{id}`    | Get reservation by ID                    |
-| GET    | `/api/reservations/grouped` | Get reservations grouped by day     |
-| GET    | `/api/reservations/range`   | Get reservations within a datetime range |
-| POST   | `/api/reservations`         | Create a reservation                     |
-| PUT    | `/api/reservations/{id}`    | Update a reservation                     |
-| DELETE | `/api/reservations/{id}`    | Delete a reservation                     |
-
-### **Resources**
-
-| Method | Endpoint              | Description        |
-| ------ | --------------------- | ------------------ |
-| GET    | `/api/resources`      | Get all resources  |
-| GET    | `/api/resources/{id}` | Get resource by ID |
-| POST   | `/api/resources`      | Create a resource  |
-| PUT    | `/api/resources/{id}` | Update a resource  |
-| DELETE | `/api/resources/{id}` | Delete a resource  |
