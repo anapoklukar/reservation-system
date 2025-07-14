@@ -1,6 +1,6 @@
 package poklukar.reservationsystem.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,17 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ResourceRepository resourceRepository;
-
-    @Autowired
-    public ReservationServiceImpl(ReservationRepository reservationRepository, ResourceRepository resourceRepository) {
-        this.reservationRepository = reservationRepository;
-        this.resourceRepository = resourceRepository;
-    }
 
     @Override
     public List<ReservationResponse> getAllReservations() {

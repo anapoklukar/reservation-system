@@ -1,31 +1,21 @@
 package poklukar.reservationsystem;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
 class ResourceReservationIntegrationTest {
-
-    @LocalServerPort
-    private int port;
 
     @Autowired
     private TestRestTemplate restTemplate;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private String resourcesUrl;
     private String reservationsUrl;
@@ -33,12 +23,13 @@ class ResourceReservationIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        resourcesUrl = "http://localhost:" + port + "/api/resources";
-        reservationsUrl = "http://localhost:" + port + "/api/reservations";
+        resourcesUrl = "/api/resources";
+        reservationsUrl = "/api/reservations";
 
         jsonHeaders = new HttpHeaders();
         jsonHeaders.setContentType(MediaType.APPLICATION_JSON);
     }
+
 
     @Test
     void testResourceAndReservationLifecycle() {

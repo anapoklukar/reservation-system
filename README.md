@@ -31,7 +31,7 @@ reservation-system/
 * **Gradle** (8.14)
 * **Docker** (20.10)
 
-## Installation & Setup
+## Local Installation & Setup
 
 ### 1. Database Setup
 
@@ -54,10 +54,14 @@ You can customize the credentials.
 
 ```bash
 cd backend
-DB_USERNAME=yourusername DB_PASSWORD=yourpassword ./gradlew clean bootRun
+DB_USERNAME=yourusername DB_PASSWORD=yourpassword SPRING_PROFILES_ACTIVE=dev ./gradlew clean bootRun
 ```
 
 The backend runs on `http://localhost:8080`.
+
+### 📖 OpenAPI Documentation
+
+After starting the backend, you can access the auto-generated API documentation at `http://localhost:8080/swagger-ui.html`.
 
 ### 3. Frontend Setup
 
@@ -69,12 +73,12 @@ npm start
 
 The frontend runs on `http://localhost:3000`.
 
-## Testing
+## Local Testing
 
 ### Backend Test
 
 Run the integration test:
 ```bash
 cd backend
-DB_USERNAME=yourusername DB_PASSWORD=yourpassword ./gradlew test
+DB_USERNAME=yourusername DB_PASSWORD=yourpassword SPRING_PROFILES_ACTIVE=dev ./gradlew test
 ```

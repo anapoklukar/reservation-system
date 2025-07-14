@@ -25,6 +25,7 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.projectlombok:lombok")
     implementation("org.hibernate.validator:hibernate-validator")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.0")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -13,34 +13,34 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
+import poklukar.reservationsystem.model.dto.ErrorBody;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    private Map<String, Object> buildBody(HttpStatus status, String message, String path) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("status", status.value());
-        body.put("message", message);
-        body.put("path", path);
-        return body;
+    private ErrorBody buildError(String errorCode, String message, String path) {
+        return new ErrorBody(errorCode, message, path);
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<Map<String, Object>> handleResponseStatusException(ResponseStatusException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorBody> handleResponseStatusException(ResponseStatusException ex, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.resolve(ex.getStatusCode().value());
+        String errorCode = status.name();
+
         log.warn("Handled ResponseStatusException: {} {} - {}", request.getMethod(), request.getRequestURI(), ex.getReason());
-        return new ResponseEntity<>(buildBody((HttpStatus) ex.getStatusCode(), ex.getReason(), request.getRequestURI()), ex.getStatusCode());
+        return new ResponseEntity<>(
+                buildError(errorCode, ex.getReason(), request.getRequestURI()),
+                ex.getStatusCode()
+        );
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, Object>> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorBody> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest request) {
         String message = ex.getConstraintViolations().stream()
                 .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                 .findFirst()
@@ -49,13 +49,13 @@ public class GlobalExceptionHandler {
         log.warn("400 Bad Request - Constraint violation: {} {} - {}", request.getMethod(), request.getRequestURI(), message);
 
         return new ResponseEntity<>(
-                buildBody(HttpStatus.BAD_REQUEST, message, request.getRequestURI()),
+                buildError("VALIDATION_ERROR", message, request.getRequestURI()),
                 HttpStatus.BAD_REQUEST
         );
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorBody> handleValidationException(MethodArgumentNotValidException ex, HttpServletRequest request) {
         FieldError fieldError = ex.getBindingResult().getFieldErrors().stream().findFirst().orElse(null);
         String message = fieldError != null
                 ? fieldError.getField() + ": " + fieldError.getDefaultMessage()
@@ -64,47 +64,62 @@ public class GlobalExceptionHandler {
         log.warn("400 Bad Request - Validation failed: {} {} - {}", request.getMethod(), request.getRequestURI(), message);
 
         return new ResponseEntity<>(
-                buildBody(HttpStatus.BAD_REQUEST, message, request.getRequestURI()),
+                buildError("VALIDATION_ERROR", message, request.getRequestURI()),
                 HttpStatus.BAD_REQUEST
         );
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, Object>> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorBody> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
         log.warn("400 Bad Request - Missing or malformed JSON body at {} {}", request.getMethod(), request.getRequestURI());
         return new ResponseEntity<>(
-                buildBody(HttpStatus.BAD_REQUEST, "Malformed or missing request body", request.getRequestURI()),
+                buildError("MALFORMED_JSON", "Malformed or missing request body", request.getRequestURI()),
                 HttpStatus.BAD_REQUEST
         );
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleNotFound(NoHandlerFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorBody> handleNotFound(NoHandlerFoundException ex, HttpServletRequest request) {
         log.warn("404 Not Found: {} {}", request.getMethod(), request.getRequestURI());
-        return new ResponseEntity<>(buildBody(HttpStatus.NOT_FOUND, "Endpoint not found", request.getRequestURI()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(
+                buildError("NOT_FOUND", "Endpoint not found", request.getRequestURI()),
+                HttpStatus.NOT_FOUND
+        );
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<Map<String, Object>> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorBody> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
         log.warn("405 Method Not Allowed: {} {} - {}", request.getMethod(), request.getRequestURI(), ex.getMessage());
-        return new ResponseEntity<>(buildBody(HttpStatus.METHOD_NOT_ALLOWED, "Method not allowed", request.getRequestURI()), HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(
+                buildError("METHOD_NOT_ALLOWED", "Method not allowed", request.getRequestURI()),
+                HttpStatus.METHOD_NOT_ALLOWED
+        );
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<Map<String, Object>> handleArgumentTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorBody> handleArgumentTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
         log.warn("400 Bad Request - Type Mismatch: {} {} - {}", request.getMethod(), request.getRequestURI(), ex.getMessage());
-        return new ResponseEntity<>(buildBody(HttpStatus.BAD_REQUEST, "Invalid parameter type", request.getRequestURI()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                buildError("TYPE_MISMATCH", "Invalid parameter type", request.getRequestURI()),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<Map<String, Object>> handleMissingParams(MissingServletRequestParameterException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorBody> handleMissingParams(MissingServletRequestParameterException ex, HttpServletRequest request) {
         log.warn("400 Bad Request - Missing param '{}': {} {}", ex.getParameterName(), request.getMethod(), request.getRequestURI());
-        return new ResponseEntity<>(buildBody(HttpStatus.BAD_REQUEST, "Missing required parameter: " + ex.getParameterName(), request.getRequestURI()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                buildError("MISSING_PARAMETER", "Missing required parameter: " + ex.getParameterName(), request.getRequestURI()),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorBody> handleGenericException(Exception ex, HttpServletRequest request) {
         log.error("500 Internal Server Error: {} {}", request.getMethod(), request.getRequestURI(), ex);
-        return new ResponseEntity<>(buildBody(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred", request.getRequestURI()), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(
+                buildError("INTERNAL_ERROR", "Unexpected error occurred", request.getRequestURI()),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }
